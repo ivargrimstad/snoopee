@@ -1,0 +1,1 @@
+= SnoopEE Discovery - a registration and discovery service for Java EE based microservices
