@@ -1,0 +1,33 @@
+= SnoopEE - A Discovery Service for Java EE
+
+SnoopEE [ˈsnuːpı] is an experimental registration and discovery service for Java EE based microservices.
+
+== Getting Started
+
+. Start the link:snoop-service.adoc[Snoop Service]
+. link:service-registration.adoc[Service Registration]
+. link:service-discovery.adoc[Service Discovery]
+
+== Maven
+
+. Released artifacts are available in link:http://search.maven.org/#search%7Cga%7C1%7Csnoop[Maven Central]
+. Snapshots configuration:
+
+ <repositories>
+    <repository>
+       <id>agilejava-snapshots</id>
+       <url>http://nexus.agilejava.eu/content/groups/public</url>
+       <snapshots>
+          <enabled>true</enabled>
+       </snapshots>
+    </repository>
+ </repositories>
+
+== Examples
+
+- link:https://github.com/ivargrimstad/snoop-samples[snoop-samples@GitHub]
+- link:https://github.com/arun-gupta/microservices[https://github.com/arun-gupta/microservices]
+
+== FAQ
+
+- link:FAQ.adoc[Frequently Asked Questions]
