@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>eu.agilejava</groupId>
+   <artifactId>snoop-service</artifactId>
+   <version>1.3.5-SNAPSHOT</version>
+   <packaging>war</packaging>
+
+   <name>SnoopEE Service</name>
+   <description>SnoopEE - A Discovery Service for Java EE.</description>
+
+   <parent>
+      <groupId>eu.agilejava</groupId>
+      <artifactId>snoop-root</artifactId>
+      <version>1.3.5-SNAPSHOT</version>
+   </parent>
+
+   <profiles>
+      <profile>
+         <id>glassfish</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>com.spotify</groupId>
+                  <artifactId>docker-maven-plugin</artifactId>
+                  <version>${docker.plugin.version}</version>
+                  <configuration>
+                     <serverId>docker-hub</serverId>
+                     <imageName>ivargrimstad/${project.artifactId}:${project.version}</imageName>
+                     <baseImage>glassfish:4.1-jdk8</baseImage>
+                     <maintainer>Ivar Grimstad (ivar.grimstad@gmail.com)</maintainer>
+                     <resources>
+                        <resource>
+                           <targetPath>/usr/local/glassfish4/glassfish/domains/domain1/config/</targetPath>
+                           <directory>${basedir}/src/main/glassfish</directory>
+                           <include>logging.properties</include>
+                        </resource>
+                        <resource>
+                           <targetPath>/usr/local/glassfish4/glassfish/domains/domain1/lib/ext/</targetPath>
+                           <directory>${basedir}/src/main/glassfish</directory>
+                           <include>custom-logger-0.5.jar</include>
+                        </resource>
+                        <resource>
+                           <targetPath>/usr/local/glassfish4/glassfish/domains/domain1/autodeploy/</targetPath>
+                           <directory>${basedir}/target</directory>
+                           <include>${project.build.finalName}.war</include>
+                        </resource>
+                     </resources>                     
+                     <entryPoint>["asadmin", "start-domain", "--verbose"]</entryPoint>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+</project>

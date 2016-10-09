@@ -1,0 +1,34 @@
+== Service Discovery
+
+. Maven Dependency
+
+ <dependency>
+    <groupId>eu.agilejava</groupId>
+    <artifactId>snoop-client</artifactId>
+    <version>${snoop.version}/version>
+ </dependency>
+
+. Configure the client
+.. Using `snoop.yml`
+
+ snoop:
+   snoopService: 192.168.59.103:8081/snoop-service/
+
+.. Or by environment variable
+
+ docker run -it -p 8080:8080 -e "snoopService=192.168.59.103:8081/snoop-service/" ivargrimstad/snoop-helloworld:1.0.0-SNAPSHOT
+
+.. Or by system property
+
+ -DsnoopService=192.168.59.103:8081/snoop-service/
+
+. To discover a service, use the @Snoop qualifier to inject a client to the registered service.
++
+[source,java]
+@Inject
+@Snoop(serviceName = "hello")
+private SnoopDiscoveryClient helloService;
+
+. link:service-consumption.adoc[Consume the Service]
+
+link:README.adoc[[home\]]

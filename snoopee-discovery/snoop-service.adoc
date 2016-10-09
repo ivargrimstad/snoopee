@@ -1,0 +1,7 @@
+== Snoop Service
+
+Start the Snoop Service
+
+ docker run -it -p 8081:8080 ivargrimstad/snoop-service
+
+link:README.adoc[[home\]]
