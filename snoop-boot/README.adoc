@@ -1,3 +1,0 @@
-= Snoop Boot
-
-Snoop support for Spring Boot applications.
