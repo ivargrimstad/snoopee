@@ -32,6 +32,20 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.WithAnnotations;
 import eu.agilejava.snoopee.annotation.EnableSnoopEEClient;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * CDI Extension that scans for @EnableSnoopEEClient annotations.
@@ -51,8 +65,85 @@ public class SnoopEEScannerExtension implements Extension {
 
     void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
 
+        LOGGER.config("Discovering SnoopEE clients");
         SnoopEEExtensionHelper.setServiceName(serviceName);
         SnoopEEExtensionHelper.setSnoopEnabled(snoopEnabled);
+
+        AnnotatedType<SnoopEERegistrationClient> at = bm.createAnnotatedType(SnoopEERegistrationClient.class);
+        final InjectionTarget<SnoopEERegistrationClient> it = bm.createInjectionTarget(at);
+       
+        abd.addBean(new Bean<SnoopEERegistrationClient>() {
+            @Override
+            public Class<?> getBeanClass() {
+                return SnoopEERegistrationClient.class;
+            }
+
+            @Override
+            public Set<InjectionPoint> getInjectionPoints() {
+                return it.getInjectionPoints();
+            }
+
+            @Override
+            public boolean isNullable() {
+                return false;
+            }
+
+            @Override
+            public SnoopEERegistrationClient create(CreationalContext<SnoopEERegistrationClient> creationalContext) {
+                SnoopEERegistrationClient instance = it.produce(creationalContext);
+                it.inject(instance, creationalContext);
+                it.postConstruct(instance);
+                
+                return instance;
+            }
+
+            @Override
+            public void destroy(SnoopEERegistrationClient instance, CreationalContext<SnoopEERegistrationClient> creationalContext) {
+                it.preDestroy(instance);
+                it.dispose(instance);
+                creationalContext.release();
+            }
+
+            @Override
+            public Set<Type> getTypes() {
+                Set<Type> types = new HashSet<Type>();
+                types.add(SnoopEERegistrationClient.class);
+                types.add(Object.class);
+                return types;
+            }
+
+            @Override
+            public Set<Annotation> getQualifiers() {
+                Set<Annotation> qualifiers = new HashSet<Annotation>();
+                qualifiers.add(new AnnotationLiteral<Default>() {
+                });
+                qualifiers.add(new AnnotationLiteral<Any>() {
+                });
+                return qualifiers;
+            }
+
+            @Override
+            public Class<? extends Annotation> getScope() {
+                return ApplicationScoped.class;
+            }
+
+            @Override
+            public String getName() {
+                return "snoopEERegistrationClient";
+            }
+
+            @Override
+            public Set<Class<? extends Annotation>> getStereotypes() {
+                return Collections.emptySet();
+            }
+
+            @Override
+            public boolean isAlternative() {
+                return false;
+            }
+
+        });
+
         LOGGER.config("Finished scanning for SnoopEE clients");
     }
 

@@ -25,8 +25,9 @@ package eu.agilejava.snoopee.scan;
 
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.YAMLException;
-import eu.agilejava.snoop.SnoopConfigurationException;
-import eu.agilejava.snoop.client.SnoopConfig;
+import eu.agilejava.snoopee.SnoopEEConfigurationException;
+import eu.agilejava.snoopee.annotation.SnoopEEClient;
+import eu.agilejava.snoopee.client.SnoopEEConfig;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Calendar;
@@ -36,16 +37,9 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
-import javax.ejb.ScheduleExpression;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.TimedObject;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
-import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
-import javax.websocket.ClientEndpoint;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnMessage;
@@ -57,9 +51,7 @@ import javax.websocket.WebSocketContainer;
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
-@ClientEndpoint
-@Singleton
-@Startup
+@SnoopEEClient
 public class SnoopEERegistrationClient {
 
     private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
@@ -67,9 +59,9 @@ public class SnoopEERegistrationClient {
     private static final String STATUS_ENDPOINT = "snoopstatus/";
 
     private String serviceUrl;
-    private final SnoopConfig applicationConfig = new SnoopConfig();
+    private final SnoopEEConfig applicationConfig = new SnoopEEConfig();
 
-    @Resource
+//    @Resource
     private TimerService timerService;
 
     @PostConstruct
@@ -84,7 +76,7 @@ public class SnoopEERegistrationClient {
                 LOGGER.config(() -> "Registering " + applicationConfig.getServiceName());
                 register(applicationConfig.getServiceName());
 
-            } catch (SnoopConfigurationException e) {
+            } catch (SnoopEEConfigurationException e) {
                 LOGGER.severe(() -> "SnoopEE is enabled but not configured properly: " + e.getMessage());
             }
 
@@ -95,17 +87,17 @@ public class SnoopEERegistrationClient {
 
     public void register(final String clientId) {
 
-        sendMessage(REGISTER_ENDPOINT, applicationConfig.toJSON());
+//        sendMessage(REGISTER_ENDPOINT, applicationConfig.toJSON());
 
-        ScheduleExpression schedule = new ScheduleExpression();
-        schedule.second("*/10").minute("*").hour("*").start(Calendar.getInstance().getTime());
+//        ScheduleExpression schedule = new ScheduleExpression();
+//        schedule.second("*/10").minute("*").hour("*").start(Calendar.getInstance().getTime());
+//
+//        TimerConfig config = new TimerConfig();
+//        config.setPersistent(false);
+//
+//        Timer timer = timerService.createCalendarTimer(schedule, config);
 
-        TimerConfig config = new TimerConfig();
-        config.setPersistent(false);
-
-        Timer timer = timerService.createCalendarTimer(schedule, config);
-
-        LOGGER.config(() -> timer.getSchedule().toString());
+//        LOGGER.config(() -> timer.getSchedule().toString());
     }
 
     /**
@@ -160,7 +152,7 @@ public class SnoopEERegistrationClient {
         sendMessage(STATUS_ENDPOINT + applicationConfig.getServiceName(), null);
     }
 
-    private void readConfiguration() throws SnoopConfigurationException {
+    private void readConfiguration() throws SnoopEEConfigurationException {
 
         Map<String, Object> snoopConfig = Collections.EMPTY_MAP;
         try {
@@ -192,7 +184,7 @@ public class SnoopEERegistrationClient {
                             .orElseGet(() -> {
                                 String confProp = Optional.ofNullable(snoopConfig.get(key))
                                         .orElseThrow(() -> {
-                                            return new SnoopConfigurationException(key + " must be configured either in application.yml or as env parameter");
+                                            return new SnoopEEConfigurationException(key + " must be configured either in application.yml or as env parameter");
                                         })
                                         .toString();
                                 return confProp;
