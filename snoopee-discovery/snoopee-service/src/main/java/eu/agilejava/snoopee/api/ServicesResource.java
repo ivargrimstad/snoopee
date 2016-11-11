@@ -27,14 +27,19 @@ import eu.agilejava.snoopee.SnoopEEClientRegistry;
 import eu.agilejava.snoopee.SnoopEEConfig;
 import java.util.Collection;
 import javax.ejb.EJB;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  *
@@ -43,25 +48,54 @@ import javax.ws.rs.core.Response;
 @Path("services")
 public class ServicesResource {
 
-   @EJB
-   private SnoopEEClientRegistry snoopeeClientRegistry;
+    @Context
+    private UriInfo uriInfo;
 
-   @GET
-   @Produces(APPLICATION_JSON)
-   public Response all() {
+    @EJB
+    private SnoopEEClientRegistry snoopeeClientRegistry;
 
-      final Collection<SnoopEEConfig> serviceConfigs = snoopeeClientRegistry.getServiceConfigs();
+    @GET
+    @Produces(APPLICATION_JSON)
+    public Response all() {
 
-      return Response.ok(new GenericEntity<Collection<SnoopEEConfig>>(serviceConfigs) {})
-              .header("Access-Control-Allow-Origin", "*").build();
-   }
+        final Collection<SnoopEEConfig> serviceConfigs = snoopeeClientRegistry.getServiceConfigs();
 
-   @GET
-   @Produces(APPLICATION_JSON)
-   @Path("{serviceId}")
-   public Response lookup(@PathParam("serviceId") String serviceId) {
+        return Response.ok(new GenericEntity<Collection<SnoopEEConfig>>(serviceConfigs) {
+        })
+                .header("Access-Control-Allow-Origin", "*").build();
+    }
 
-      return Response.ok(snoopeeClientRegistry.getClientConfig(serviceId)
-              .orElseThrow(NotFoundException::new)).build();
-   }
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("{serviceId}")
+    public Response lookup(@PathParam("serviceId") String serviceId) {
+
+        return Response.ok(snoopeeClientRegistry.getClientConfig(serviceId)
+                .orElseThrow(NotFoundException::new)).build();
+    }
+
+    @POST
+    public Response register(final SnoopEEConfig serviceConfig) {
+        snoopeeClientRegistry.register(serviceConfig);
+        return Response.created(uriInfo.getAbsolutePathBuilder().segment(serviceConfig.getServiceName()).build()).build();
+    }
+
+    @PUT
+    @Path("{serviceName}")
+    public Response updateStatus(@PathParam("serviceName") String serviceName, final SnoopEEConfig serviceConfig) {
+        if (serviceConfig != null) {
+            snoopeeClientRegistry.register(serviceConfig);
+        } else {
+            snoopeeClientRegistry.deRegister(serviceName);
+        }
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{serviceName}")
+    public Response deRegister(@PathParam("serviceName") String serviceName) {
+        snoopeeClientRegistry.deRegister(serviceName);
+        return Response.accepted().build();
+    }
+
 }
