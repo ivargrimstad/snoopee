@@ -26,137 +26,104 @@ package eu.agilejava.snoopee.scan;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.YAMLException;
 import eu.agilejava.snoopee.SnoopEEConfigurationException;
+import eu.agilejava.snoopee.annotation.SnoopEEClient;
 import eu.agilejava.snoopee.client.SnoopEEConfig;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
-import javax.ejb.ScheduleExpression;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerConfig;
-import javax.ejb.TimerService;
-import javax.websocket.ClientEndpoint;
-import javax.websocket.ContainerProvider;
-import javax.websocket.DeploymentException;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import javax.ws.rs.core.Response;
 
 /**
  * Registers with Snoop and gives heartbeats every 10 second.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
-@ClientEndpoint
-@Singleton
-@Startup
+@SnoopEEClient
 public class SnoopEERegistrationClient {
 
-    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoop");
-    private static final String REGISTER_ENDPOINT = "snoop";
-    private static final String STATUS_ENDPOINT = "snoopstatus/";
+    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
 
     private String serviceUrl;
     private final SnoopEEConfig applicationConfig = new SnoopEEConfig();
 
-    @Resource
-    private TimerService timerService;
+    private Timer timer;
 
-    @PostConstruct
-    private void init() {
-        LOGGER.config("Checking if snoop is enabled");
+    @Inject
+    private Event<SnoopEEConfig> configuredEvent;
+
+    private void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
+        LOGGER.config("Checking if SnoopEE is enabled");
 
         if (SnoopEEExtensionHelper.isSnoopEnabled()) {
 
             try {
                 readConfiguration();
-
                 LOGGER.config(() -> "Registering " + applicationConfig.getServiceName());
-                register(applicationConfig.getServiceName());
+                Response response = ClientBuilder.newClient()
+                        .target(serviceUrl)
+                        .path("api")
+                        .path("services")
+                        .request()
+                        .post(Entity.entity(applicationConfig, APPLICATION_JSON));
+
+                LOGGER.config(() -> "Fire health event");
+                configuredEvent.fire(applicationConfig);
 
             } catch (SnoopEEConfigurationException e) {
-                LOGGER.severe(() -> "Snoop is enabled but not configured properly: " + e.getMessage());
+                LOGGER.severe(() -> "SnoopEE is enabled but not configured properly: " + e.getMessage());
             }
 
         } else {
-            LOGGER.config("Snoop is not enabled. Use @EnableSnoopClient!");
+            LOGGER.config("SnoopEE is not enabled. Use @EnableSnoopEEClient!");
         }
     }
 
-    public void register(final String clientId) {
+    public void health() {
 
-        sendMessage(REGISTER_ENDPOINT, applicationConfig.toJSON());
-
-        ScheduleExpression schedule = new ScheduleExpression();
-        schedule.second("*/10").minute("*").hour("*").start(Calendar.getInstance().getTime());
-
-        TimerConfig config = new TimerConfig();
-        config.setPersistent(false);
-
-        Timer timer = timerService.createCalendarTimer(schedule, config);
-
-        LOGGER.config(() -> timer.getSchedule().toString());
-    }
-
-    /**
-     * Handles incoming message.
-     *
-     * @param session The WebSocket session
-     * @param message The message
-     */
-    @OnMessage
-    public void onMessage(Session session, String message) {
-        LOGGER.config(() -> "Message: " + message);
-        sendMessage(STATUS_ENDPOINT + applicationConfig.getServiceName(), applicationConfig.toJSON());
-    }
-
-    @Timeout
-    public void health(Timer timer) {
+//        for (;;) {
         LOGGER.config(() -> "health update: " + Calendar.getInstance().getTime());
-        LOGGER.config(() -> "Next: " + timer.getNextTimeout());
-        sendMessage(STATUS_ENDPOINT + applicationConfig.getServiceName(), applicationConfig.toJSON());
-    }
+//        LOGGER.config(() -> "Next: " + timer.getNextTimeout());
+        Response response = ClientBuilder.newClient()
+                .target(serviceUrl)
+                .path("api")
+                .path("services")
+                .path(applicationConfig.getServiceName())
+                .request()
+                .put(Entity.entity(applicationConfig, APPLICATION_JSON));
 
-    /**
-     * Sends message to the WebSocket server.
-     *
-     * @param endpoint The server endpoint
-     * @param msg The message
-     * @return a return message
-     */
-    private String sendMessage(String endpoint, String msg) {
-
-        LOGGER.config(() -> "Sending message: " + msg);
-
-        String returnValue = "-1";
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            String uri = serviceUrl + endpoint;
-            Session session = container.connectToServer(this, URI.create(uri));
-            session.getBasicRemote().sendText(msg != null ? msg : "");
-            returnValue = session.getId();
-
-        } catch (DeploymentException | IOException ex) {
-            LOGGER.warning(ex.getMessage());
-        }
-
-        return returnValue;
+//            try {
+//                Thread.sleep(10000L);
+//            } catch (InterruptedException ex) {
+//                LOGGER.config(() -> "Something went wrong: " + ex.getMessage());
+//                deregister();
+//            }
+//        }
     }
 
     @PreDestroy
     private void deregister() {
 
         LOGGER.config(() -> "Deregistering " + applicationConfig.getServiceName());
-        sendMessage(STATUS_ENDPOINT + applicationConfig.getServiceName(), null);
+        Response response = ClientBuilder.newClient()
+                .target(serviceUrl)
+                .path("api")
+                .path("services")
+                .path(applicationConfig.getServiceName())
+                .request()
+                .delete();
     }
 
     private void readConfiguration() throws SnoopEEConfigurationException {
@@ -180,7 +147,7 @@ public class SnoopEERegistrationClient {
 
         LOGGER.config(() -> "application config: " + applicationConfig.toJSON());
 
-        serviceUrl = "ws://" + readProperty("snoopService", snoopConfig);
+        serviceUrl = "http://" + readProperty("snoopService", snoopConfig);
     }
 
     private String readProperty(final String key, Map<String, Object> snoopConfig) {
@@ -200,4 +167,22 @@ public class SnoopEERegistrationClient {
                 });
         return property;
     }
+
+    public void init(@Observes SnoopEEConfig configEvent) {
+
+        LOGGER.config("EVENT");
+        TimerTask health = new HealthPing();
+        timer = new Timer();
+        timer.scheduleAtFixedRate(health, 0, 10000);
+    }
+
+    private final class HealthPing extends TimerTask {
+
+        @Override
+        public void run() {
+            LOGGER.config(() -> "I am healthy!");
+            health();
+        }
+    }
+
 }
