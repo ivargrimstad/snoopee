@@ -5,3 +5,4 @@ SnoopEE [ˈsnuːpı] consist of the following sub projects
  * SnoopEE Discovery - a registration and discovery service for Java EE based microservices
  * SnoopEE Config - a flexible configuration service for Java EE based microservices
  
+
