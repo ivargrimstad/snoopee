@@ -4,7 +4,7 @@ SnoopEE [ˈsnuːpı] is an experimental registration and discovery service for J
 
 == Getting Started
 
-. Start the link:snoop-service.adoc[Snoop Service]
+. Start the link:snoopee-service.adoc[SnoopEE Service]
 . link:service-registration.adoc[Service Registration]
 . link:service-discovery.adoc[Service Discovery]
 

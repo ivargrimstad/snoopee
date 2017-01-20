@@ -1,10 +1,10 @@
 = Frequently Asked Questions about Snoop
 
-## Is Snoop a Load Balancer?
-*No*, the intention of Snoop is to provide a service registration and lookup
+## Is SnoopEE a Load Balancer?
+*No*, the intention of SnoopEE is to provide a service registration and lookup
 mechanism. If you are running multiple instances of a microservice, this should
 be load balanced using any load balancer tool and it is the _load balancer's IP/hostname_
-that is registered with snoop using the Snoop configuration parameters.
+that is registered with SnoopEE Service using the SnoopEE configuration parameters.
 
 _[todo] example_
 

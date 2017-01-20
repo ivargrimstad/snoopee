@@ -1,0 +1,7 @@
+snoopee:
+   host: http://localhost
+   port: 8082
+   serviceRoot: snoopee-config-service/api
+   
+#   snoopeeService: localhost:8080/snoopee-service/
+   snoopeeService: 192.168.99.100:8081/snoopee-service/

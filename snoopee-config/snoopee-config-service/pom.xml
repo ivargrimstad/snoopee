@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>eu.agilejava</groupId>
+   <artifactId>snoopee-config-service</artifactId>
+   <version>2.0.0-SNAPSHOT</version>
+   <packaging>war</packaging>
+
+   <name>SnoopEE Config Service</name>
+   <description>SnoopEE - A Config Service for Java EE.</description>
+
+    <properties>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+
+   <parent>
+      <groupId>eu.agilejava</groupId>
+      <artifactId>snoopee-config</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+   </parent>
+
+   <dependencies>
+       <dependency>
+           <groupId>eu.agilejava</groupId>
+           <artifactId>snoopee</artifactId>
+           <version>2.0.0-SNAPSHOT</version>
+       </dependency>
+   </dependencies>
+
+<build>
+      <plugins>
+         <plugin>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker.plugin.version}</version>
+            <configuration>
+               <serverId>docker-hub</serverId>
+               <imageName>ivargrimstad/${project.artifactId}:${project.version}</imageName>
+               <baseImage>jboss/wildfly:10.1.0.Final</baseImage>
+               <maintainer>Ivar Grimstad (ivar.grimstad@gmail.com)</maintainer>
+               <resources>
+                  <resource>
+                     <targetPath>/opt/jboss/wildfly/standalone/configuration/</targetPath>
+                     <directory>${basedir}/src/main/wildfly</directory>
+                     <include>standalone-snoopee.xml</include>
+                  </resource>
+                  <resource>
+                     <targetPath>/opt/jboss/wildfly/standalone/deployments/</targetPath>
+                     <directory>${project.build.directory}</directory>
+                     <include>${project.build.finalName}.war</include>
+                  </resource>
+               </resources>   
+               <env>
+                  <snoopee-config.host>http://localhost</snoopee-config.host>
+                  <snoopee-config.port>8082</snoopee-config.port>
+                  <snoopee-config.serviceRoot>snoopee-config-service/api</snoopee-config.serviceRoot>
+                  <snoopee-config.snoopeeService>10.19.210.62:8081/snoopee-service/</snoopee-config.snoopeeService>            
+               </env>
+               <entryPoint>["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-snoopee.xml", "-b", "0.0.0.0"]</entryPoint>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+   
+</project>
