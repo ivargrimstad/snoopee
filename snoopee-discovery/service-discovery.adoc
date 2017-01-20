@@ -4,7 +4,7 @@
 
  <dependency>
     <groupId>eu.agilejava</groupId>
-    <artifactId>snoop-client</artifactId>
+    <artifactId>snoopee-client</artifactId>
     <version>${snoopee.version}/version>
  </dependency>
 
@@ -20,7 +20,7 @@
 
 .. Or by system properties
 
- -DsnoopService=192.168.59.103:8081/snoopee-service/
+ -DsnoopeeService=192.168.59.103:8081/snoopee-service/
 
 . To discover a service, use the @SnoopEE qualifier to inject a client to the registered service.
 +

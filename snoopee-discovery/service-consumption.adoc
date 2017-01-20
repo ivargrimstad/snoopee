@@ -1,4 +1,4 @@
-== Consuming a Snoop Service
+== Consuming a SnoopEE Service
 
 . link:service-discovery.adoc[Discover the Service]
 
@@ -17,7 +17,7 @@ String helloResponse = helloService.simpleGet("hello")
     try {
        WebTarget endpoint = helloService.getServiceRoot();
        ...
-    } catch(SnoopServiceUnavailableException e) {
+    } catch(SnoopEEServiceUnavailableException e) {
        ...
     }
 

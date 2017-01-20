@@ -20,7 +20,7 @@
 . Configure the service
 .. Use `snoopee.yml`
 
- snoop:
+ snoopee:
    host: http://localhost
    port: 8080
    serviceRoot: snoopee-hello-service/api
