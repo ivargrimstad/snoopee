@@ -45,7 +45,7 @@ import eu.agilejava.snoopee.annotation.SnoopEE;
 @ApplicationScoped
 public class SnoopEEProducer {
 
-    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoop");
+    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
 
     private Map<String, Object> snoopConfig = Collections.EMPTY_MAP;
 
@@ -53,7 +53,7 @@ public class SnoopEEProducer {
      * Creates a SnoopEEServiceClient for the named service.
      *
      * @param ip The injection point
-     * @return a configured snoop service client
+     * @return a configured SnoopEE service client
      */
     @SnoopEE
     @Produces
@@ -64,7 +64,7 @@ public class SnoopEEProducer {
 
         LOGGER.config(() -> "producing " + applicationName);
 
-        String serviceUrl = "http://" + readProperty("snoopService", snoopConfig);
+        String serviceUrl = "http://" + readProperty("snoopeeService", snoopConfig);
         LOGGER.config(() -> "Service URL: " + serviceUrl);
 
         return new SnoopEEServiceClient.Builder(applicationName)
@@ -80,7 +80,7 @@ public class SnoopEEProducer {
                             .orElseGet(() -> {
                                 String confProp = Optional.ofNullable(snoopConfig.get(key))
                                         .orElseThrow(() -> {
-                                            return new SnoopEEConfigurationException(key + " must be configured either in application.yml or as env or system property");
+                                            return new SnoopEEConfigurationException(key + " must be configured either in snoopee.yml or as env or system property");
                                         })
                                         .toString();
                                 return confProp;
@@ -99,9 +99,9 @@ public class SnoopEEProducer {
 
         try {
             Yaml yaml = new Yaml();
-            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoop.yml"));
+            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoopee.yml"));
 
-            snoopConfig = (Map<String, Object>) props.get("snoop");
+            snoopConfig = (Map<String, Object>) props.get("snoopee");
 
         } catch (YAMLException e) {
             LOGGER.config(() -> "No configuration file. Using env properties.");

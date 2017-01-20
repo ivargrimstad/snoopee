@@ -1,9 +1,9 @@
 If you want to see logging of client registrations, heartbeats and discoveries.
 
-== Start the Snoop Service
+== Start the SnoopEE Service
 
 ```
-docker run -it -p 8081:8080 ivargrimstad/snoop-service
+docker run -it -p 8081:8080 ivargrimstad/snoopee-service
 ```
 
 == Set log levels

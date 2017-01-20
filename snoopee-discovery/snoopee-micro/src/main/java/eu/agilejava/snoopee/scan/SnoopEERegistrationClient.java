@@ -47,7 +47,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 
 /**
- * Registers with Snoop and gives heartbeats every 10 second.
+ * Registers with SnoopEE and gives heartbeats every 10 second.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
@@ -131,9 +131,9 @@ public class SnoopEERegistrationClient {
         Map<String, Object> snoopConfig = Collections.EMPTY_MAP;
         try {
             Yaml yaml = new Yaml();
-            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoop.yml"));
+            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoopee.yml"));
 
-            snoopConfig = (Map<String, Object>) props.get("snoop");
+            snoopConfig = (Map<String, Object>) props.get("snoopee");
 
         } catch (YAMLException e) {
             LOGGER.config(() -> "No configuration file. Using env properties.");
@@ -147,7 +147,7 @@ public class SnoopEERegistrationClient {
 
         LOGGER.config(() -> "application config: " + applicationConfig.toJSON());
 
-        serviceUrl = "http://" + readProperty("snoopService", snoopConfig);
+        serviceUrl = "http://" + readProperty("snoopeeService", snoopConfig);
     }
 
     private String readProperty(final String key, Map<String, Object> snoopConfig) {
@@ -158,7 +158,7 @@ public class SnoopEERegistrationClient {
                             .orElseGet(() -> {
                                 String confProp = Optional.ofNullable(snoopConfig.get(key))
                                         .orElseThrow(() -> {
-                                            return new SnoopEEConfigurationException(key + " must be configured either in application.yml or as env parameter");
+                                            return new SnoopEEConfigurationException(key + " must be configured either in snoopee.yml or as env parameter");
                                         })
                                         .toString();
                                 return confProp;

@@ -34,8 +34,8 @@ import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.Nonbinding;
 
 /**
- * Annotation for enabling application as Snoop client. Use this annotation to register the application (service) with
- * Snoop.
+ * Annotation for enabling application as SnoopEE client. Use this annotation to register the application (service) with
+ * SnoopEE.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */

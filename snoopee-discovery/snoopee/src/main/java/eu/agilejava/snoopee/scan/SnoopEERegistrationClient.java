@@ -52,7 +52,7 @@ import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
 /**
- * Registers with Snoop and gives heartbeats every 10 second.
+ * Registers with SnoopEE and gives heartbeats every 10 second.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
@@ -61,9 +61,9 @@ import javax.websocket.WebSocketContainer;
 @Startup
 public class SnoopEERegistrationClient {
 
-    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoop");
-    private static final String REGISTER_ENDPOINT = "snoop";
-    private static final String STATUS_ENDPOINT = "snoopstatus/";
+    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
+    private static final String REGISTER_ENDPOINT = "snoopee";
+    private static final String STATUS_ENDPOINT = "snoopeestatus/";
 
     private String serviceUrl;
     private final SnoopEEConfig applicationConfig = new SnoopEEConfig();
@@ -73,7 +73,7 @@ public class SnoopEERegistrationClient {
 
     @PostConstruct
     private void init() {
-        LOGGER.config("Checking if snoop is enabled");
+        LOGGER.config("Checking if SnoopEE is enabled");
 
         if (SnoopEEExtensionHelper.isSnoopEnabled()) {
 
@@ -84,11 +84,11 @@ public class SnoopEERegistrationClient {
                 register(applicationConfig.getServiceName());
 
             } catch (SnoopEEConfigurationException e) {
-                LOGGER.severe(() -> "Snoop is enabled but not configured properly: " + e.getMessage());
+                LOGGER.severe(() -> "SnoopEE is enabled but not configured properly: " + e.getMessage());
             }
 
         } else {
-            LOGGER.config("Snoop is not enabled. Use @EnableSnoopClient!");
+            LOGGER.config("SnoopEE is not enabled. Use @EnableSnoopEEClient!");
         }
     }
 
@@ -164,9 +164,8 @@ public class SnoopEERegistrationClient {
         Map<String, Object> snoopConfig = Collections.EMPTY_MAP;
         try {
             Yaml yaml = new Yaml();
-            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoop.yml"));
-
-            snoopConfig = (Map<String, Object>) props.get("snoop");
+            Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoopee.yml"));
+            snoopConfig = (Map<String, Object>) props.get("snoopee");
 
         } catch (YAMLException e) {
             LOGGER.config(() -> "No configuration file. Using env properties.");
@@ -180,7 +179,7 @@ public class SnoopEERegistrationClient {
 
         LOGGER.config(() -> "application config: " + applicationConfig.toJSON());
 
-        serviceUrl = "ws://" + readProperty("snoopService", snoopConfig);
+        serviceUrl = "ws://" + readProperty("snoopeeService", snoopConfig);
     }
 
     private String readProperty(final String key, Map<String, Object> snoopConfig) {
@@ -191,7 +190,7 @@ public class SnoopEERegistrationClient {
                             .orElseGet(() -> {
                                 String confProp = Optional.ofNullable(snoopConfig.get(key))
                                         .orElseThrow(() -> {
-                                            return new SnoopEEConfigurationException(key + " must be configured either in application.yml or as env parameter");
+                                            return new SnoopEEConfigurationException(key + " must be configured either in snoopee.yml or as env parameter");
                                         })
                                         .toString();
                                 return confProp;

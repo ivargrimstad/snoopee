@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Ivar Grimstad (ivar.grimstad@gmail.com).
+ * Copyright 2017 Ivar Grimstad (ivar.grimstad@cybercom.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package eu.agilejava.snoopee.annotation;
+package eu.agilejava.snoopee.config.api;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Stereotype;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 
 /**
- * Annotation for enabling application as SnoopEE client. Use this annotation to register the application (service) with
- * SnoopEE.
  *
- * @author Ivar Grimstad (ivar.grimstad@gmail.com)
+ * @author Ivar Grimstad (ivar.grimstad@cybercom.com)
  */
-@Stereotype
-@Retention(RUNTIME)
-@Documented
-@ApplicationScoped
-@Target(TYPE)
-public @interface SnoopEEClient {
+@Path("configurations")
+public class ConfigurationsResource {
+    
+    @GET
+    @Path("{serviceId}")
+    public Response getConfigurationsForService(@PathParam("serviceId") String serviceId ) {
+        return Response.ok().build();
+    }
 }

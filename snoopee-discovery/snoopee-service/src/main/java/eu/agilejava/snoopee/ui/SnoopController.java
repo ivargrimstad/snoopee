@@ -33,7 +33,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 /**
- * Controller for the snoop service UI.
+ * Controller for the SnoopEE service UI.
  * 
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
@@ -41,7 +41,7 @@ import javax.inject.Named;
 @RequestScoped
 public class SnoopController {
 
-   private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoop");
+   private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
 
    @EJB
    private SnoopEEClientRegistry clients;

@@ -26,7 +26,7 @@ package eu.agilejava.snoopee.client;
 import javax.ejb.ApplicationException;
 
 /**
- * This exception is thrown if the snoop service is not available.
+ * This exception is thrown if the SnoopEE service is not available.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */

@@ -54,7 +54,7 @@ public class SnoopEEScannerExtension implements Extension {
         LOGGER.config("Discovering SnoopEE clients");
         SnoopEEExtensionHelper.setServiceName(serviceName);
         SnoopEEExtensionHelper.setSnoopEnabled(snoopEnabled);
-        LOGGER.config("Finished scanning for Snoop clients");
+        LOGGER.config("Finished scanning for SnoopEE clients");
 
 
         LOGGER.config("Finished scanning for SnoopEE clients");

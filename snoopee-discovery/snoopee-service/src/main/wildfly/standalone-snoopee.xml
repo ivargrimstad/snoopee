@@ -100,7 +100,7 @@
             <logger category="jacorb.config">
                 <level name="ERROR"/>
             </logger>
-            <logger category="eu.agilejava.snoop">
+            <logger category="eu.agilejava.snoopee">
                 <level name="CONFIG"/>
             </logger>
             <root-logger>

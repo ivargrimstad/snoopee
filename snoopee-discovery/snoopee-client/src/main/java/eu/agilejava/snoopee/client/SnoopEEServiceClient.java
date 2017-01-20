@@ -33,14 +33,14 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 
 /**
- * Client API for calling services registered with Snoop.
+ * Client API for calling services registered with SnoopEE.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
 public class SnoopEEServiceClient {
 
-    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoop");
-    private static final String DEFAULT_BASE_URI = "http://localhost:8080/snoop-service/";
+    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
+    private static final String DEFAULT_BASE_URI = "http://localhost:8080/snoopee-service/";
 
     private final String applicationName;
     private final String serviceUrl;
@@ -71,9 +71,9 @@ public class SnoopEEServiceClient {
     }
 
     /**
-     * Locator to get the service root for the service registered with Snoop.
+     * Locator to get the service root for the service registered with SnoopEE.
      *
-     * Use this method if the convenience methods simpleXXX are not sufficient or to avoid the extra call to Snoop for
+     * Use this method if the convenience methods simpleXXX are not sufficient or to avoid the extra call to SnoopEE for
      * every request.
      *
      * @return the serviceRoot
@@ -93,7 +93,7 @@ public class SnoopEEServiceClient {
     /**
      * Convenience method for making a simple GET request on a resource.
      *
-     * Calling this method will result in a call to Snoop to retrieve the current configuration for the service in
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
      * addition to the actual GET request.
      *
      * @param resourcePath The relative path to the resource
@@ -120,7 +120,7 @@ public class SnoopEEServiceClient {
     /**
      * Convenience method for making a simple DELETE request on a resource.
      *
-     * Calling this method will result in a call to Snoop to retrieve the current configuration for the service in
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
      * addition to the actual DELETE request.
      *
      * @param resourcePath The relative path to the resource
@@ -147,7 +147,7 @@ public class SnoopEEServiceClient {
     /**
      * Convenience method for making a simple PUT request on a resource.
      *
-     * Calling this method will result in a call to Snoop to retrieve the current configuration for the service in
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
      * addition to the actual PUT request.
      *
      * @param resourcePath The relative path to the resource
@@ -175,7 +175,7 @@ public class SnoopEEServiceClient {
     /**
      * Convenience method for making a simple POST request on a resource.
      *
-     * Calling this method will result in a call to Snoop to retrieve the current configuration for the service in
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
      * addition to the actual POST request.
      *
      * @param resourcePath The relative path to the resource
