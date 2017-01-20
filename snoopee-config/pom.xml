@@ -17,9 +17,8 @@
     </parent>
   
     <modules>
-        <!--    <module>snoopee-config-client</module>
-           <module>snoopee-config-service</module>
-        --> 
+        <module>snoopee-config-client</module>
+        <module>snoopee-config-service</module>
     </modules>
 
     <dependencies> 
