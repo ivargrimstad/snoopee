@@ -1,4 +1,4 @@
-= Frequently Asked Questions about Snoop
+= Frequently Asked Questions about SnoopEE
 
 ## Is SnoopEE a Load Balancer?
 *No*, the intention of SnoopEE is to provide a service registration and lookup

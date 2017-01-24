@@ -26,6 +26,7 @@ package eu.agilejava.snoopee.client;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.YAMLException;
 import eu.agilejava.snoopee.SnoopEEConfigurationException;
+import eu.agilejava.snoopee.SnoopEEExtensionHelper;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class SnoopEEProducer {
 
     private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
 
-    private Map<String, Object> snoopConfig = Collections.EMPTY_MAP;
+    private Map<String, Object> snoopeeConfig = Collections.EMPTY_MAP;
 
     /**
      * Creates a SnoopEEServiceClient for the named service.
@@ -64,7 +65,7 @@ public class SnoopEEProducer {
 
         LOGGER.config(() -> "producing " + applicationName);
 
-        String serviceUrl = "http://" + readProperty("snoopeeService", snoopConfig);
+        String serviceUrl = "http://" + readProperty("snoopeeService", snoopeeConfig);
         LOGGER.config(() -> "Service URL: " + serviceUrl);
 
         return new SnoopEEServiceClient.Builder(applicationName)
@@ -101,7 +102,11 @@ public class SnoopEEProducer {
             Yaml yaml = new Yaml();
             Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoopee.yml"));
 
-            snoopConfig = (Map<String, Object>) props.get("snoopee");
+            snoopeeConfig = (Map<String, Object>) props.get("snoopee");
+
+            if (!SnoopEEExtensionHelper.isSnoopEnabled()) {
+                SnoopEEExtensionHelper.setServiceName(readProperty("serviceName", snoopeeConfig));
+            }
 
         } catch (YAMLException e) {
             LOGGER.config(() -> "No configuration file. Using env properties.");

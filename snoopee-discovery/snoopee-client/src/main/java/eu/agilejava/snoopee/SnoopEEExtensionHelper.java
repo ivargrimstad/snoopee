@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Ivar Grimstad (ivar.grimstad@cybercom.com).
+ * Copyright 2015 Ivar Grimstad (ivar.grimstad@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package eu.agilejava.snoopee.config.api;
-
-import eu.agilejava.snoopee.config.Configuration;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+package eu.agilejava.snoopee;
 
 /**
+ * Singleton to store the information gathered from annotation scan.
  *
- * @author Ivar Grimstad (ivar.grimstad@cybercom.com)
+ * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
-@Path("services")
-public class ConfigurationsResource {
+public final class SnoopEEExtensionHelper {
 
-    @GET
-    @Path("{serviceName}/configurations")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getConfigurationsForService(@PathParam("serviceName") String serviceName) {
+    private String serviceName;
+    private boolean snoopEnabled;
 
-        List<Configuration> configurations = new ArrayList<>();
-        configurations.add(new Configuration("jalla", "balla"));
-        
-        return Response.ok(new GenericEntity<List<Configuration>>(configurations) {}).build();
+    private static final SnoopEEExtensionHelper INSTANCE = new SnoopEEExtensionHelper();
+
+    public static String getServiceName() {
+        return INSTANCE.serviceName;
+    }
+
+    public static void setServiceName(String serviceName) {
+        INSTANCE.serviceName = serviceName;
+    }
+
+    public static boolean isSnoopEnabled() {
+        return INSTANCE.snoopEnabled;
+    }
+
+    public static void setSnoopEnabled(final boolean snoopEnabled) {
+        INSTANCE.snoopEnabled = snoopEnabled;
     }
 }

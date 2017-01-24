@@ -4,4 +4,4 @@ snoopee:
    serviceRoot: snoopee-config-service/api
    
 #   snoopeeService: localhost:8080/snoopee-service/
-   snoopeeService: 192.168.99.100:8081/snoopee-service/
+   snoopeeService: 10.19.210.62:8081/snoopee-service/

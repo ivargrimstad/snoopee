@@ -25,7 +25,7 @@ SnoopEE [ˈsnuːpı] is an experimental registration and discovery service for J
 
 == Examples
 
-- link:https://github.com/ivargrimstad/snoop-samples[snoop-samples@GitHub (works with SnoopEE 1.0]
+- link:https://github.com/ivargrimstad/snoopee-samples[snoopee-samples@GitHub (works with SnoopEE 1.0]
 - link:https://github.com/arun-gupta/microservices[https://github.com/arun-gupta/microservices]
 
 == FAQ

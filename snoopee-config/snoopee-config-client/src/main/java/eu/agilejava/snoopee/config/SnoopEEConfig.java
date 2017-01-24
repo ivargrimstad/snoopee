@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Ivar Grimstad (ivar.grimstad@gmail.com).
+ * Copyright 2017 Ivar Grimstad (ivar.grimstad@cybercom.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package eu.agilejava.snoopee.scan;
+package eu.agilejava.snoopee.config;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
+import javax.inject.Qualifier;
 
 /**
- * Singleton to store the information gathered from annotation scan.
  *
- * @author Ivar Grimstad (ivar.grimstad@gmail.com)
+ * @author Ivar Grimstad (ivar.grimstad@cybercom.com)
  */
-public final class SnoopEEExtensionHelper {
-
-    private String serviceName;
-    private boolean snoopEnabled;
-
-    private static final SnoopEEExtensionHelper INSTANCE = new SnoopEEExtensionHelper();
-
-    public static String getServiceName() {
-        return INSTANCE.serviceName;
-    }
-
-    public static void setServiceName(String serviceName) {
-        INSTANCE.serviceName = serviceName;
-    }
-
-    public static boolean isSnoopEnabled() {
-        return INSTANCE.snoopEnabled;
-    }
-
-    public static void setSnoopEnabled(final boolean snoopEnabled) {
-        INSTANCE.snoopEnabled = snoopEnabled;
-    }
+@Qualifier
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface SnoopEEConfig {
+    
+    @Nonbinding
+    String key() default "";
+    
+    @Nonbinding
+    String defaultValue() default "";
 }

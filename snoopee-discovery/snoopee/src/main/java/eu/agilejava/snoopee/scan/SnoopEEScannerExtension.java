@@ -23,6 +23,7 @@
  */
 package eu.agilejava.snoopee.scan;
 
+import eu.agilejava.snoopee.SnoopEEExtensionHelper;
 import java.util.logging.Logger;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
