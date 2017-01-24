@@ -44,4 +44,7 @@ public @interface SnoopEEConfig {
     
     @Nonbinding
     String key() default "";
+    
+    @Nonbinding
+    String defaultValue() default "";
 }

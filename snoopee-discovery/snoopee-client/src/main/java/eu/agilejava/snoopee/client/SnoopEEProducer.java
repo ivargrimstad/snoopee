@@ -26,6 +26,7 @@ package eu.agilejava.snoopee.client;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.YAMLException;
 import eu.agilejava.snoopee.SnoopEEConfigurationException;
+import eu.agilejava.snoopee.SnoopEEExtensionHelper;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -102,6 +103,10 @@ public class SnoopEEProducer {
             Map<String, Object> props = (Map<String, Object>) yaml.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/snoopee.yml"));
 
             snoopeeConfig = (Map<String, Object>) props.get("snoopee");
+
+            if (!SnoopEEExtensionHelper.isSnoopEnabled()) {
+                SnoopEEExtensionHelper.setServiceName(readProperty("serviceName", snoopeeConfig));
+            }
 
         } catch (YAMLException e) {
             LOGGER.config(() -> "No configuration file. Using env properties.");
