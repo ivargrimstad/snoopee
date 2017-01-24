@@ -23,33 +23,63 @@
  */
 package eu.agilejava.snoopee.config;
 
+import eu.agilejava.snoopee.SnoopEEConfigurationException;
+import eu.agilejava.snoopee.annotation.SnoopEE;
+import eu.agilejava.snoopee.client.SnoopEEServiceClient;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import static java.util.stream.Collectors.toMap;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
+import javax.ws.rs.core.GenericType;
 
 /**
  *
  * @author Ivar Grimstad (ivar.grimstad@cybercom.com)
  */
 @ApplicationScoped
-public class ConfigProducer {
+public class SnoopEEConfigProducer {
+
+    @Inject
+    @SnoopEE(serviceName = "snoopee-config")
+    private SnoopEEServiceClient configService;
+
+    private Map<String, String> configurations = new HashMap<>();
 
     @Produces
-    @Config
+    @SnoopEEConfig
     public String getStringConfigValue(final InjectionPoint ip) {
-        return getValue(ip.getAnnotated().getAnnotation(Config.class).key());
+        return getValue(ip.getAnnotated().getAnnotation(SnoopEEConfig.class).key());
     }
-    
+
     @Produces
-    @Config
+    @SnoopEEConfig
     public int getIntConfigValue(InjectionPoint ip) {
         return Integer.parseInt(getStringConfigValue(ip));
     }
-    
-    
+
     private String getValue(final String key) {
-        
-        // TODO:
-        return "jalla";
+
+        if (!configurations.containsKey(key)) {
+            throw new SnoopEEConfigurationException("No value for key=" + key);
+        }
+
+        return configurations.get(key);
+    }
+
+    @PostConstruct
+    private void init() {
+//        configurations.put("jalla", configService.getServiceRoot().toString());
+
+        configurations.putAll(configService.simpleGet("services/helloworld/configurations")
+                .filter(r -> r.getStatus() == 200)
+                .map(r -> r.readEntity(new GenericType<List<Configuration>>() {}))
+                .orElseThrow(SnoopEEConfigurationException::new)
+                .stream()
+                .collect(toMap(Configuration::getKey, Configuration::getValue)));
     }
 }

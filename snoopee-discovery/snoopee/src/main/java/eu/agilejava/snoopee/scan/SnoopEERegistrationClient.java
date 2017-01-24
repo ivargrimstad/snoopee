@@ -23,6 +23,7 @@
  */
 package eu.agilejava.snoopee.scan;
 
+import eu.agilejava.snoopee.SnoopEEExtensionHelper;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.YAMLException;
 import eu.agilejava.snoopee.SnoopEEConfigurationException;

@@ -23,21 +23,32 @@
  */
 package eu.agilejava.snoopee.config.api;
 
+import eu.agilejava.snoopee.config.Configuration;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  *
  * @author Ivar Grimstad (ivar.grimstad@cybercom.com)
  */
-@Path("configurations")
+@Path("services")
 public class ConfigurationsResource {
-    
+
     @GET
-    @Path("{serviceId}")
-    public Response getConfigurationsForService(@PathParam("serviceId") String serviceId ) {
-        return Response.ok().build();
+    @Path("{serviceName}/configurations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getConfigurationsForService(@PathParam("serviceName") String serviceName) {
+
+        List<Configuration> configurations = new ArrayList<>();
+        configurations.add(new Configuration("jalla", "balla"));
+        
+        return Response.ok(new GenericEntity<List<Configuration>>(configurations) {}).build();
     }
 }

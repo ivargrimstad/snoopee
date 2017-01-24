@@ -82,12 +82,12 @@ public class SnoopEEServiceClient {
      */
     public WebTarget getServiceRoot() throws SnoopEEServiceUnavailableException {
 
-        SnoopEEConfig snoopConfig = getConfigFromSnoop();
+        SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
         LOGGER.fine(() -> "looking up service for " + applicationName);
 
         return ClientBuilder.newClient()
-                .target(snoopConfig.getServiceHome())
-                .path(snoopConfig.getServiceRoot());
+                .target(snoopEEConfig.getServiceHome())
+                .path(snoopEEConfig.getServiceRoot());
     }
 
     /**
@@ -200,7 +200,7 @@ public class SnoopEEServiceClient {
         return returnValue;
     }
 
-    private SnoopEEConfig getConfigFromSnoop() throws SnoopEEServiceUnavailableException {
+    private SnoopEEConfig getConfigFromSnoopEE() throws SnoopEEServiceUnavailableException {
 
         try {
             Response response = ClientBuilder.newClient()

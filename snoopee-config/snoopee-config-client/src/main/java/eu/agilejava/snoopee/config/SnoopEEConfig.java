@@ -40,7 +40,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface Config {
+public @interface SnoopEEConfig {
     
     @Nonbinding
     String key() default "";
