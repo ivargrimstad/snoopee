@@ -15,8 +15,8 @@ SnoopEE [ˈsnuːpı] is an experimental registration and discovery service for J
 
  <repositories>
     <repository>
-       <id>agilejava-snapshots</id>
-       <url>http://nexus.agilejava.eu/content/groups/public</url>
+       <id>OSSRH</id>
+       <url>https://oss.sonatype.org/content/groups/public</url>
        <snapshots>
           <enabled>true</enabled>
        </snapshots>
