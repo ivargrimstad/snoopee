@@ -59,7 +59,7 @@
                   <snoopee-config.host>http://localhost</snoopee-config.host>
                   <snoopee-config.port>8082</snoopee-config.port>
                   <snoopee-config.serviceRoot>snoopee-config-service/api</snoopee-config.serviceRoot>
-                  <snoopee-config.snoopeeService>10.19.210.62:8081/snoopee-service/</snoopee-config.snoopeeService>            
+                  <snoopee-config.snoopeeService>130.190.101.232:8081/snoopee-service/</snoopee-config.snoopeeService>            
                </env>
                <entryPoint>["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-snoopee.xml", "-b", "0.0.0.0"]</entryPoint>
             </configuration>

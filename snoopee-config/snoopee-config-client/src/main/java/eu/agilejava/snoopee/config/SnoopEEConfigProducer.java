@@ -53,7 +53,7 @@ public class SnoopEEConfigProducer {
     @SnoopEE(serviceName = "snoopee-config")
     private SnoopEEServiceClient configService;
 
-    private Map<String, String> configurations = new HashMap<>();
+    private final Map<String, String> configurations = new HashMap<>();
 
     @Produces
     @SnoopEEConfig
