@@ -47,8 +47,8 @@ public class ConfigurationsResource {
     public Response getConfigurationsForService(@PathParam("serviceName") String serviceName) {
 
         List<Configuration> configurations = new ArrayList<>();
-        configurations.add(new Configuration("jalla", "balla"));
-        
+        configurations.add(new Configuration("message", "Duke"));
+
         return Response.ok(new GenericEntity<List<Configuration>>(configurations) {}).build();
     }
 }
