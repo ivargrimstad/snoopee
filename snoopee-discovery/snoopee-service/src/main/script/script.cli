@@ -1,0 +1,4 @@
+/subsystem=logging/logger=eu.agilejava.snoopee:add(level=CONFIG)
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=CONFIG)
+deploy --url=file:///opt/jboss/wildfly/binaries/snoopee-service-2.0.0-SNAPSHOT.war --name=snoopee-service.war
+exit
