@@ -41,6 +41,7 @@ import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -72,13 +73,16 @@ public class SnoopEERegistrationClient {
             try {
                 readConfiguration();
                 LOGGER.config(() -> "Registering " + applicationConfig.getServiceName());
-                Response response = ClientBuilder.newClient()
+                
+                Client client = ClientBuilder.newClient();
+                Response response = client
                         .target(serviceUrl)
                         .path("api")
                         .path("services")
                         .request()
                         .post(Entity.entity(applicationConfig, APPLICATION_JSON));
-
+                client.close();
+                
                 LOGGER.config(() -> "Fire health event");
                 configuredEvent.fire(applicationConfig);
 
@@ -96,14 +100,15 @@ public class SnoopEERegistrationClient {
 //        for (;;) {
         LOGGER.config(() -> "health update: " + Calendar.getInstance().getTime());
 //        LOGGER.config(() -> "Next: " + timer.getNextTimeout());
-        Response response = ClientBuilder.newClient()
+        Client client = ClientBuilder.newClient();
+        Response response = client
                 .target(serviceUrl)
                 .path("api")
                 .path("services")
                 .path(applicationConfig.getServiceName())
                 .request()
                 .put(Entity.entity(applicationConfig, APPLICATION_JSON));
-
+        client.close();
 //            try {
 //                Thread.sleep(10000L);
 //            } catch (InterruptedException ex) {
@@ -117,6 +122,8 @@ public class SnoopEERegistrationClient {
     private void deregister() {
 
         LOGGER.config(() -> "Deregistering " + applicationConfig.getServiceName());
+        
+        Client client = ClientBuilder.newClient();
         Response response = ClientBuilder.newClient()
                 .target(serviceUrl)
                 .path("api")
@@ -124,6 +131,7 @@ public class SnoopEERegistrationClient {
                 .path(applicationConfig.getServiceName())
                 .request()
                 .delete();
+        client.close();
     }
 
     private void readConfiguration() throws SnoopEEConfigurationException {
