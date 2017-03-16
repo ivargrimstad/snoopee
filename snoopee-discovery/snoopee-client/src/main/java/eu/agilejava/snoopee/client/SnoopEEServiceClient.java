@@ -244,14 +244,16 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> get(MultivaluedHashMap<String, Object> headers, String resourcePath) {
 
+    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
+        LOGGER.fine(() -> "looking up service for " + applicationName);
+    	
         Optional<Response> returnValue = Optional.empty();
 
         try {
         	Client client = ClientBuilder.newClient();
         	returnValue = Optional.of(client
-        			.target(serviceUrl)
-        			.path("api")
-        			.path("services")
+        			.target(snoopEEConfig.getServiceHome())
+                    .path(snoopEEConfig.getServiceRoot())
         			.path(resourcePath)
         			.request()
         			.headers(headers)
@@ -276,14 +278,16 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> delete(MultivaluedHashMap<String, Object> headers, String resourcePath) {
 
+    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
+        LOGGER.fine(() -> "looking up service for " + applicationName);
+        
         Optional<Response> returnValue = Optional.empty();
 
         try {
         	Client client = ClientBuilder.newClient();
         	returnValue = Optional.of(client
-        			.target(serviceUrl)
-        			.path("api")
-        			.path("services")
+        			.target(snoopEEConfig.getServiceHome())
+                    .path(snoopEEConfig.getServiceRoot())
         			.path(resourcePath)
         			.request()
         			.headers(headers)
@@ -309,14 +313,16 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> put(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
 
+    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
+        LOGGER.fine(() -> "looking up service for " + applicationName);
+        
         Optional<Response> returnValue = Optional.empty();
 
         try {
         	Client client = ClientBuilder.newClient();
         	returnValue = Optional.of(client
-        			.target(serviceUrl)
-        			.path("api")
-        			.path("services")
+        			.target(snoopEEConfig.getServiceHome())
+                    .path(snoopEEConfig.getServiceRoot())
         			.path(resourcePath)
         			.request()
         			.headers(headers)
@@ -342,14 +348,16 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> post(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
 
+    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
+        LOGGER.fine(() -> "looking up service for " + applicationName);
+        
         Optional<Response> returnValue = Optional.empty();
 
         try {
         	Client client = ClientBuilder.newClient();
         	returnValue = Optional.of(client
-        			.target(serviceUrl)
-        			.path("api")
-        			.path("services")
+        			.target(snoopEEConfig.getServiceHome())
+                    .path(snoopEEConfig.getServiceRoot())
         			.path(resourcePath)
         			.request()
         			.headers(headers)
