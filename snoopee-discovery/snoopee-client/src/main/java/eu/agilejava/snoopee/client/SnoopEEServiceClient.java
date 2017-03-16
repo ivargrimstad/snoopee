@@ -244,21 +244,15 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> get(MultivaluedHashMap<String, Object> headers, String resourcePath) {
 
-    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
-        LOGGER.fine(() -> "looking up service for " + applicationName);
-    	
-        Optional<Response> returnValue = Optional.empty();
+    	Optional<Response> returnValue = Optional.empty();
 
         try {
-        	Client client = ClientBuilder.newClient();
-        	returnValue = Optional.of(client
-        			.target(snoopEEConfig.getServiceHome())
-                    .path(snoopEEConfig.getServiceRoot())
-        			.path(resourcePath)
-        			.request()
-        			.headers(headers)
-        			.get());
-        	client.close();
+        	returnValue = Optional.of(getServiceRoot()
+                    .path(resourcePath)
+                    .request()
+                    .headers(headers)
+                    .get());
+        	
         } catch (SnoopEEServiceUnavailableException e) {
             LOGGER.warning(() -> "Service unavailable for " + applicationName);
         }
@@ -278,21 +272,15 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> delete(MultivaluedHashMap<String, Object> headers, String resourcePath) {
 
-    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
-        LOGGER.fine(() -> "looking up service for " + applicationName);
-        
-        Optional<Response> returnValue = Optional.empty();
+    	Optional<Response> returnValue = Optional.empty();
 
         try {
-        	Client client = ClientBuilder.newClient();
-        	returnValue = Optional.of(client
-        			.target(snoopEEConfig.getServiceHome())
-                    .path(snoopEEConfig.getServiceRoot())
+        	returnValue = Optional.of(getServiceRoot()
         			.path(resourcePath)
         			.request()
         			.headers(headers)
         			.delete());
-        	client.close();
+        	
         } catch (SnoopEEServiceUnavailableException e) {
             LOGGER.warning(() -> "Service unavailable for " + applicationName);
         }
@@ -312,22 +300,15 @@ public class SnoopEEServiceClient {
      * @return an optional response that is empty if the service is unavailable.
      */
     public Optional<Response> put(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
-
-    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
-        LOGGER.fine(() -> "looking up service for " + applicationName);
-        
+   
         Optional<Response> returnValue = Optional.empty();
 
         try {
-        	Client client = ClientBuilder.newClient();
-        	returnValue = Optional.of(client
-        			.target(snoopEEConfig.getServiceHome())
-                    .path(snoopEEConfig.getServiceRoot())
+        	returnValue = Optional.of(getServiceRoot()
         			.path(resourcePath)
         			.request()
-        			.headers(headers)
-        			.put(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
-        	client.close();
+                  	.headers(headers)
+                  	.put(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
         } catch (SnoopEEServiceUnavailableException e) {
             LOGGER.warning(() -> "Service unavailable for " + applicationName);
         }
@@ -348,21 +329,14 @@ public class SnoopEEServiceClient {
      */
     public Optional<Response> post(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
 
-    	SnoopEEConfig snoopEEConfig = getConfigFromSnoopEE();
-        LOGGER.fine(() -> "looking up service for " + applicationName);
-        
         Optional<Response> returnValue = Optional.empty();
 
         try {
-        	Client client = ClientBuilder.newClient();
-        	returnValue = Optional.of(client
-        			.target(snoopEEConfig.getServiceHome())
-                    .path(snoopEEConfig.getServiceRoot())
-        			.path(resourcePath)
-        			.request()
-        			.headers(headers)
-        			.post(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
-        	client.close();
+        	returnValue = Optional.of(getServiceRoot()
+                    .path(resourcePath)
+                    .request()
+                    .headers(headers)
+                    .post(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
         } catch (SnoopEEServiceUnavailableException e) {
             LOGGER.warning(() -> "Service unavailable for " + applicationName);
         }
