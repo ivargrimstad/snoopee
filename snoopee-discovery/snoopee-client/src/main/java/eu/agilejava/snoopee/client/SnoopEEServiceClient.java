@@ -26,10 +26,13 @@ package eu.agilejava.snoopee.client;
 import java.util.Optional;
 import java.util.logging.Logger;
 import javax.ws.rs.ProcessingException;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 /**
@@ -116,7 +119,7 @@ public class SnoopEEServiceClient {
 
         return returnValue;
     }
-
+    
     /**
      * Convenience method for making a simple DELETE request on a resource.
      *
@@ -199,7 +202,7 @@ public class SnoopEEServiceClient {
 
         return returnValue;
     }
-
+    
     private SnoopEEConfig getConfigFromSnoopEE() throws SnoopEEServiceUnavailableException {
 
         try {
@@ -220,5 +223,124 @@ public class SnoopEEServiceClient {
         } catch (ProcessingException e) {
             throw new SnoopEEServiceUnavailableException(e);
         }
+    }
+    
+    
+    /**
+     * ----- 20170316 -----
+     */
+    
+    private static final String DEFAULT_ENCODING = "charset=utf8";
+    
+    /**
+     * Method for making a GET request on a resource with setting explicit headers.
+     *
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
+     * addition to the actual GET request.
+     *
+     * @param headers The headers to set
+     * @param resourcePath The relative path to the resource
+     * @return an optional response that is empty if the service is unavailable.
+     */
+    public Optional<Response> get(MultivaluedHashMap<String, Object> headers, String resourcePath) {
+
+    	Optional<Response> returnValue = Optional.empty();
+
+        try {
+        	returnValue = Optional.of(getServiceRoot()
+                    .path(resourcePath)
+                    .request()
+                    .headers(headers)
+                    .get());
+        	
+        } catch (SnoopEEServiceUnavailableException e) {
+            LOGGER.warning(() -> "Service unavailable for " + applicationName);
+        }
+
+        return returnValue;
+    }
+    
+    /**
+     * Method for making a DELETE request on a resource with setting explicit headers.
+     *
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
+     * addition to the actual DELETE request.
+     *
+     * @param headers The headers to set
+     * @param resourcePath The relative path to the resource
+     * @return an optional response that is empty if the service is unavailable.
+     */
+    public Optional<Response> delete(MultivaluedHashMap<String, Object> headers, String resourcePath) {
+
+    	Optional<Response> returnValue = Optional.empty();
+
+        try {
+        	returnValue = Optional.of(getServiceRoot()
+        			.path(resourcePath)
+        			.request()
+        			.headers(headers)
+        			.delete());
+        	
+        } catch (SnoopEEServiceUnavailableException e) {
+            LOGGER.warning(() -> "Service unavailable for " + applicationName);
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * Method for making a simple PUT request on a resource with setting explicit headers.
+     *
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
+     * addition to the actual PUT request.
+     *
+     * @param headers The headers to set
+     * @param resourcePath The relative path to the resource
+     * @param resource The changes made to this resource
+     * @return an optional response that is empty if the service is unavailable.
+     */
+    public Optional<Response> put(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
+   
+        Optional<Response> returnValue = Optional.empty();
+
+        try {
+        	returnValue = Optional.of(getServiceRoot()
+        			.path(resourcePath)
+        			.request()
+                  	.headers(headers)
+                  	.put(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
+        } catch (SnoopEEServiceUnavailableException e) {
+            LOGGER.warning(() -> "Service unavailable for " + applicationName);
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * Method for making a simple POST request on a resource with setting explicit headers.
+     *
+     * Calling this method will result in a call to SnoopEE to retrieve the current configuration for the service in
+     * addition to the actual POST request.
+     *
+     * @param headers The headers to set
+     * @param resourcePath The relative path to the resource
+     * @param resource The new resource
+     * @return an optional response that is empty if the service is unavailable.
+     */
+    public Optional<Response> post(MultivaluedHashMap<String, Object> headers, String resourcePath, Object resource) {
+
+        Optional<Response> returnValue = Optional.empty();
+
+        try {
+        	returnValue = Optional.of(getServiceRoot()
+                    .path(resourcePath)
+                    .request()
+                    .headers(headers)
+                    .post(Entity.entity(resource, APPLICATION_JSON + "; " + DEFAULT_ENCODING)));
+        } catch (SnoopEEServiceUnavailableException e) {
+            LOGGER.warning(() -> "Service unavailable for " + applicationName);
+        }
+
+        return returnValue;
     }
 }

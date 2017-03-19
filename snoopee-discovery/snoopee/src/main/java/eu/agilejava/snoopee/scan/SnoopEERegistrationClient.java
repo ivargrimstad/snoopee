@@ -145,6 +145,8 @@ public class SnoopEERegistrationClient {
             Session session = container.connectToServer(this, URI.create(uri));
             session.getBasicRemote().sendText(msg != null ? msg : "");
             returnValue = session.getId();
+            
+            session.close();
 
         } catch (DeploymentException | IOException ex) {
             LOGGER.warning(ex.getMessage());
