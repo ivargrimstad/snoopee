@@ -44,6 +44,7 @@ public class SnoopEEServiceClient {
 
     private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
     private static final String DEFAULT_BASE_URI = "http://localhost:8080/snoopee-service/";
+    private static final String DEFAULT_ENCODING = "charset=utf8";
 
     private final String applicationName;
     private final String serviceUrl;
@@ -224,14 +225,7 @@ public class SnoopEEServiceClient {
             throw new SnoopEEServiceUnavailableException(e);
         }
     }
-    
-    
-    /**
-     * ----- 20170316 -----
-     */
-    
-    private static final String DEFAULT_ENCODING = "charset=utf8";
-    
+        
     /**
      * Method for making a GET request on a resource with setting explicit headers.
      *

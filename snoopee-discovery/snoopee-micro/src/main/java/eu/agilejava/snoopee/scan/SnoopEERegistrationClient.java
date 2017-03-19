@@ -70,24 +70,26 @@ public class SnoopEERegistrationClient {
 
         if (SnoopEEExtensionHelper.isSnoopEnabled()) {
 
+            Client client = ClientBuilder.newClient();
+
             try {
                 readConfiguration();
                 LOGGER.config(() -> "Registering " + applicationConfig.getServiceName());
-                
-                Client client = ClientBuilder.newClient();
+
                 Response response = client
                         .target(serviceUrl)
                         .path("api")
                         .path("services")
                         .request()
                         .post(Entity.entity(applicationConfig, APPLICATION_JSON));
-                client.close();
-                
+
                 LOGGER.config(() -> "Fire health event");
                 configuredEvent.fire(applicationConfig);
 
             } catch (SnoopEEConfigurationException e) {
                 LOGGER.severe(() -> "SnoopEE is enabled but not configured properly: " + e.getMessage());
+            } finally {
+                client.close();
             }
 
         } else {
@@ -101,14 +103,17 @@ public class SnoopEERegistrationClient {
         LOGGER.config(() -> "health update: " + Calendar.getInstance().getTime());
 //        LOGGER.config(() -> "Next: " + timer.getNextTimeout());
         Client client = ClientBuilder.newClient();
-        Response response = client
-                .target(serviceUrl)
-                .path("api")
-                .path("services")
-                .path(applicationConfig.getServiceName())
-                .request()
-                .put(Entity.entity(applicationConfig, APPLICATION_JSON));
-        client.close();
+        try {
+            Response response = client
+                    .target(serviceUrl)
+                    .path("api")
+                    .path("services")
+                    .path(applicationConfig.getServiceName())
+                    .request()
+                    .put(Entity.entity(applicationConfig, APPLICATION_JSON));
+        } finally {
+            client.close();
+        }
 //            try {
 //                Thread.sleep(10000L);
 //            } catch (InterruptedException ex) {
@@ -122,16 +127,19 @@ public class SnoopEERegistrationClient {
     private void deregister() {
 
         LOGGER.config(() -> "Deregistering " + applicationConfig.getServiceName());
-        
+
         Client client = ClientBuilder.newClient();
-        Response response = ClientBuilder.newClient()
-                .target(serviceUrl)
-                .path("api")
-                .path("services")
-                .path(applicationConfig.getServiceName())
-                .request()
-                .delete();
-        client.close();
+        try {
+            Response response = ClientBuilder.newClient()
+                    .target(serviceUrl)
+                    .path("api")
+                    .path("services")
+                    .path(applicationConfig.getServiceName())
+                    .request()
+                    .delete();
+        } finally {
+            client.close();
+        }
     }
 
     private void readConfiguration() throws SnoopEEConfigurationException {
