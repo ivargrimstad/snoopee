@@ -19,6 +19,7 @@
     <modules>
         <module>snoopee-config-client</module>
         <module>snoopee-config-service</module>
+        <module>snoopee-microprofile-config</module>
     </modules>
 
     <dependencies> 

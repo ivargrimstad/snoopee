@@ -21,19 +21,54 @@
     </parent>
 
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>eu.agilejava</groupId>
             <artifactId>snoopee</artifactId>
             <version>2.0.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>eu.agilejava</groupId>
             <artifactId>snoopee-config-client</artifactId>
             <version>2.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>eu.agilejava</groupId>
+            <artifactId>snoopee-swarm</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs</artifactId>
+            <version>1.0.0.CR1</version>
+            <scope>provided</scope>
+        </dependency>      
     </dependencies>
-
+   
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>wildfly-swarm-plugin</artifactId>
+                <version>1.0.0.Beta8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <properties>
+                        <swarm.http.port>8082</swarm.http.port>                    
+                    </properties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+
+<!--    <build>
         <plugins>
             <plugin>
                 <groupId>io.fabric8</groupId>
@@ -78,7 +113,7 @@
                                     <snoopee-config.host>http://localhost</snoopee-config.host>
                                     <snoopee-config.port>8082</snoopee-config.port>
                                     <snoopee-config.serviceRoot>snoopee-config-service/api</snoopee-config.serviceRoot>
-                                    <snoopee-config.snoopeeService>130.190.101.232:8081/snoopee-service/</snoopee-config.snoopeeService>            
+                                    <snoopee-config.snoopeeService>10.1.4.56:8081/snoopee-service/</snoopee-config.snoopeeService>            
                                 </env>
                                 <ports>
                                     <port>8082:8080</port>
@@ -89,6 +124,6 @@
                 </configuration>
             </plugin>         
         </plugins>
-    </build>
+    </build>-->
    
 </project>
