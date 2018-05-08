@@ -19,6 +19,14 @@
         <version.docker-maven-plugin>0.20.0</version.docker-maven-plugin>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
             <id>glassfish</id>
