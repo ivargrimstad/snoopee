@@ -30,32 +30,40 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 /**
- *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
 @Startup
 @Singleton
 public class SnoopEEService {
 
-   private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
+    private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
 
-   @PostConstruct
-   private void start() {
+    @PostConstruct
+    private void start() {
 
-        // http://www.network-science.de/ascii/ Font: big
-        LOGGER.config("  _____                         ______ ______ ");
-        LOGGER.config(" / ____|                       |  ____|  ____|");
-        LOGGER.config("| (___  _ __   ___   ___  _ __ | |__  | |__   ");
-        LOGGER.config(" \\___ \\| '_ \\ / _ \\ / _ \\| '_ \\|  __| |  __|  ");
-        LOGGER.config(" ____) | | | | (_) | (_) | |_) | |____| |____ ");
-        LOGGER.config("|_____/|_| |_|\\___/ \\___/| .__/|______|______|");
-        LOGGER.config("                         | |                  ");
-        LOGGER.config("                         |_|                  ");
+//        // http://www.network-science.de/ascii/ Font: big
+//        LOGGER.config("  _____                         ______ ______ ");
+//        LOGGER.config(" / ____|                       |  ____|  ____|");
+//        LOGGER.config("| (___  _ __   ___   ___  _ __ | |__  | |__   ");
+//        LOGGER.config(" \\___ \\| '_ \\ / _ \\ / _ \\| '_ \\|  __| |  __|  ");
+//        LOGGER.config(" ____) | | | | (_) | (_) | |_) | |____| |____ ");
+//        LOGGER.config("|_____/|_| |_|\\___/ \\___/| .__/|______|______|");
+//        LOGGER.config("                         | |                  ");
+//        LOGGER.config("                         |_|                  ");
 
-   }
-   
-   @PreDestroy
-   private void stop() {
-      LOGGER.severe("SnoopEE stopped");
-   }
+        // http://www.ascii-art-generator.org/ Font: slant
+        LOGGER.config(() -> "");
+        LOGGER.config(() -> "   _____                         ____________   __  ____               ");
+        LOGGER.config(() ->"  / ___/____  ____  ____  ____  / ____/ ____/  /  |/  (_)_____________ ");
+        LOGGER.config(() ->"  \\__ \\/ __ \\/ __ \\/ __ \\/ __ \\/ __/ / __/    / /|_/ / / ___/ ___/ __ \\");
+        LOGGER.config(() ->" ___/ / / / / /_/ / /_/ / /_/ / /___/ /___   / /  / / / /__/ /  / /_/ /");
+        LOGGER.config(() ->"/____/_/ /_/\\____/\\____/ .___/_____/_____/  /_/  /_/_/\\___/_/   \\____/ ");
+        LOGGER.config(() -> "");
+    }
+
+
+    @PreDestroy
+    private void stop() {
+        LOGGER.severe("SnoopEE stopped");
+    }
 }
