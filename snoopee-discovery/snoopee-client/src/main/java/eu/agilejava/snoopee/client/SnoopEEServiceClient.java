@@ -43,7 +43,7 @@ import javax.ws.rs.core.Response;
 public class SnoopEEServiceClient {
 
     private static final Logger LOGGER = Logger.getLogger("eu.agilejava.snoopee");
-    private static final String DEFAULT_BASE_URI = "http://localhost:8080/snoopee-service/";
+    private static final String DEFAULT_BASE_URI = "http://localhost:8081/snoopee-service/";
     private static final String DEFAULT_ENCODING = "charset=utf8";
 
     private final String applicationName;

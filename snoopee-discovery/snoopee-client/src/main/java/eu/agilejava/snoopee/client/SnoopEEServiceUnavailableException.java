@@ -23,32 +23,18 @@
  */
 package eu.agilejava.snoopee.client;
 
-import javax.ejb.ApplicationException;
-
 /**
  * This exception is thrown if the SnoopEE service is not available.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
-@ApplicationException
 public class SnoopEEServiceUnavailableException extends RuntimeException {
-
-    public SnoopEEServiceUnavailableException() {
-    }
 
     public SnoopEEServiceUnavailableException(String message) {
         super(message);
     }
 
-    public SnoopEEServiceUnavailableException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public SnoopEEServiceUnavailableException(Throwable cause) {
         super(cause);
-    }
-
-    public SnoopEEServiceUnavailableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

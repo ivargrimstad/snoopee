@@ -23,32 +23,14 @@
  */
 package eu.agilejava.snoopee;
 
-import javax.ejb.ApplicationException;
-
 /**
  * This exception indicates that the SnoopEE configuration is erroneous.
  *
  * @author Ivar Grimstad (ivar.grimstad@gmail.com)
  */
-@ApplicationException
 public class SnoopEEConfigurationException extends RuntimeException {
-
-    public SnoopEEConfigurationException() {
-    }
 
     public SnoopEEConfigurationException(String message) {
         super(message);
-    }
-
-    public SnoopEEConfigurationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public SnoopEEConfigurationException(Throwable cause) {
-        super(cause);
-    }
-
-    public SnoopEEConfigurationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

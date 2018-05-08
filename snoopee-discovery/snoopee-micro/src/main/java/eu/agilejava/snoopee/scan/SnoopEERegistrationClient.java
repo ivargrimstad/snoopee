@@ -97,11 +97,9 @@ public class SnoopEERegistrationClient {
         }
     }
 
-    public void health() {
+    private final void health() {
 
-//        for (;;) {
         LOGGER.config(() -> "health update: " + Calendar.getInstance().getTime());
-//        LOGGER.config(() -> "Next: " + timer.getNextTimeout());
         Client client = ClientBuilder.newClient();
         try {
             Response response = client
@@ -114,19 +112,12 @@ public class SnoopEERegistrationClient {
         } finally {
             client.close();
         }
-//            try {
-//                Thread.sleep(10000L);
-//            } catch (InterruptedException ex) {
-//                LOGGER.config(() -> "Something went wrong: " + ex.getMessage());
-//                deregister();
-//            }
-//        }
     }
 
     @PreDestroy
-    private void deregister() {
+    private void deRegister() {
 
-        LOGGER.config(() -> "Deregistering " + applicationConfig.getServiceName());
+        LOGGER.config(() -> "deRegistering " + applicationConfig.getServiceName());
 
         Client client = ClientBuilder.newClient();
         try {
@@ -158,7 +149,7 @@ public class SnoopEERegistrationClient {
         applicationConfig.setServiceName(SnoopEEExtensionHelper.getServiceName());
         final String host = readProperty("host", snoopConfig);
         final String port = readProperty("port", snoopConfig);
-        applicationConfig.setServiceHome(host + ":" + port + "/");
+        applicationConfig.setServiceHome(host + ":" + port);
         applicationConfig.setServiceRoot(readProperty("serviceRoot", snoopConfig));
 
         LOGGER.config(() -> "application config: " + applicationConfig.toJSON());
