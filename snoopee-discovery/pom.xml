@@ -21,8 +21,7 @@
         <module>snoopee-micro</module>  
         <module>snoopee-client</module>  
         <module>snoopee-service</module>  
-        <module>snoopee-swarm</module> 
-    </modules>  
+    </modules>
 
     <dependencyManagement>
         <dependencies>
