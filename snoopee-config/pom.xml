@@ -19,7 +19,7 @@
     <modules>
         <module>snoopee-config-client</module>
         <module>snoopee-config-service</module>
-        <module>snoopee-config-provider</module>
+        <module>snoopee-config-source</module>
     </modules>
 
     <dependencies> 
